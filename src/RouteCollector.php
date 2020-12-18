@@ -41,7 +41,7 @@ class RouteCollector extends BaseRouteCollector
 
         $route = $this->currentGroupPrefix . $route;
         $routeDatas = $this->routeParser->parse($route);
-        $name = $this->currentGroupName . (empty($this->currentGroupName) ? '' : '.') . $name;
+        $name = $this->currentGroupName . $name;
         $routeInstance = new Route($route, $routeDatas, empty($name) ? null : $name);
         if (! empty($name)) {
             $this->namedRoutes[$name] = $routeInstance;
@@ -75,7 +75,7 @@ class RouteCollector extends BaseRouteCollector
         $currentGroupOptions = $this->currentGroupOptions;
 
         $this->currentGroupPrefix = $previousGroupPrefix . $prefix;
-        $this->currentGroupName = $previousGroupName . (empty($previousGroupName) ? '' : '.') . $name;
+        $this->currentGroupName = $previousGroupName . $name;
         $this->currentGroupOptions = $this->mergeOptions($currentGroupOptions, $options);
         $callback($this);
 

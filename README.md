@@ -21,7 +21,7 @@ use Hyperf\HttpServer\Router\Router;
 
 Router::addGroup('/users/{id}', function () {
     Router::get('/comments', 'App\Controller\IndexController@index', ['name' => 'comments.index']); // 该路由名称将被组合为 `users.comments.index`
-}, ['name' => 'users']);
+}, ['name' => 'users.']);
 ```
 
 ### 获取路由对象
