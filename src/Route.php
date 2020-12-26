@@ -12,10 +12,13 @@ namespace HyperfExt\HttpServer\Router;
 
 use Hyperf\HttpMessage\Uri\Uri;
 use Hyperf\Utils\Arr;
+use Hyperf\Utils\Traits\Macroable;
 use InvalidArgumentException;
 
 class Route
 {
+    use Macroable;
+
     public string $rule;
 
     public array $data;
@@ -40,7 +43,7 @@ class Route
                     $url .= $part;
                 } else {
                     [$key, $pattern] = $part;
-                    if (isset($parameters[$key]) && preg_match('~^' . $pattern . '$~', (string) $parameters[$key])) {
+                    if (isset($parameters[$key]) && preg_match('~' . $pattern . '~', (string) $parameters[$key])) {
                         $url .= $parameters[$key];
                         $keys[] = $key;
                     } else {
