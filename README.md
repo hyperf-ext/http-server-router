@@ -32,7 +32,7 @@ Router::addGroup('/users/{id}', function () {
 use Hyperf\HttpServer\Router\Router;
 
 /** @var \HyperfExt\HttpServer\Router\Route $route */
-$route = Router::getNamedRoute('users.comments.index');
+$route = Router::getRoute('users.comments.index');
 ```
 
 #### 通过当前请求获取当前路由

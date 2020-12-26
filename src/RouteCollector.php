@@ -22,15 +22,7 @@ class RouteCollector extends BaseRouteCollector
      */
     protected array $namedRoutes = [];
 
-    /**
-     * Adds a route to the collection.
-     *
-     * The syntax used in the $route string depends on the used route parser.
-     *
-     * @param string|string[] $httpMethod
-     * @param array|string $handler
-     */
-    public function addRoute($httpMethod, string $route, $handler, array $options = [])
+    public function addRoute($httpMethod, string $route, $handler, array $options = []): Route
     {
         if (isset($options['name'])) {
             $name = $options['name'];
@@ -54,13 +46,10 @@ class RouteCollector extends BaseRouteCollector
                 MiddlewareManager::addMiddlewares($this->server, $route, $method, $options['middleware'] ?? []);
             }
         }
+
+        return $routeInstance;
     }
 
-    /**
-     * Create a route group with a common prefix.
-     *
-     * All routes created in the passed callback will have the given group prefix prepended.
-     */
     public function addGroup(string $prefix, callable $callback, array $options = [])
     {
         if (isset($options['name'])) {
@@ -84,12 +73,42 @@ class RouteCollector extends BaseRouteCollector
         $this->currentGroupOptions = $currentGroupOptions;
     }
 
+    public function get(string $route, $handler, array $options = []): Route
+    {
+        return $this->addRoute('GET', $route, $handler, $options);
+    }
+
+    public function post(string $route, $handler, array $options = []): Route
+    {
+        return $this->addRoute('POST', $route, $handler, $options);
+    }
+
+    public function put(string $route, $handler, array $options = []): Route
+    {
+        return $this->addRoute('PUT', $route, $handler, $options);
+    }
+
+    public function delete(string $route, $handler, array $options = []): Route
+    {
+        return $this->addRoute('DELETE', $route, $handler, $options);
+    }
+
+    public function patch(string $route, $handler, array $options = []): Route
+    {
+        return $this->addRoute('PATCH', $route, $handler, $options);
+    }
+
+    public function head(string $route, $handler, array $options = []): Route
+    {
+        return $this->addRoute('HEAD', $route, $handler, $options);
+    }
+
     /**
      * Get a route instance by its name.
      *
      * @throws \HyperfExt\HttpServer\Router\RouteNotFoundException
      */
-    public function getNamedRoute(string $name): Route
+    public function getRoute(string $name): Route
     {
         if (isset($this->namedRoutes[$name])) {
             return $this->namedRoutes[$name];
