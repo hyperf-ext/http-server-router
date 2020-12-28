@@ -38,16 +38,10 @@ $route = Router::getRoute('users.comments.index');
 #### 通过当前请求获取当前路由
 
 ```php
-use Hyperf\HttpServer\Contract\RequestInterface;
-use Hyperf\HttpServer\Router\Dispatched;
-use Hyperf\Utils\ApplicationContext;
+use Hyperf\HttpServer\Router\Router;
 
 /** @var \HyperfExt\HttpServer\Router\Route $route */
-$route = ApplicationContext::getContainer()
-    ->get(RequestInterface::class)
-    ->getAttribute(Dispatched::class)
-    ->handler
-    ->routeInstance; // 为避免过多修改原始组件，该组件将路由实例放到了 Handler 中
+$route = Router::getCurrentRoute();
 ```
 
 ### 生成指定路由的 URI

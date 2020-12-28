@@ -10,17 +10,30 @@ declare(strict_types=1);
  */
 namespace HyperfExt\HttpServer\Router;
 
+use FastRoute\DataGenerator;
+use FastRoute\RouteParser;
 use Hyperf\HttpServer\MiddlewareManager;
+use Hyperf\HttpServer\Router\Dispatched;
 use Hyperf\HttpServer\Router\RouteCollector as BaseRouteCollector;
+use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class RouteCollector extends BaseRouteCollector
 {
+    protected ContainerInterface $container;
+
     protected string $currentGroupName = '';
 
     /**
      * @var \HyperfExt\HttpServer\Router\Route[]
      */
     protected array $namedRoutes = [];
+
+    public function __construct(ContainerInterface $container, RouteParser $routeParser, DataGenerator $dataGenerator, string $server = 'http')
+    {
+        parent::__construct($routeParser, $dataGenerator, $server);
+        $this->container = $container;
+    }
 
     public function addRoute($httpMethod, string $route, $handler, array $options = []): Route
     {
@@ -115,5 +128,14 @@ class RouteCollector extends BaseRouteCollector
         }
 
         throw new RouteNotFoundException("Route [{$name}] not defined.");
+    }
+
+    /**
+     * Get a route instance by current request.
+     */
+    public function getCurrentRoute(): ?Route
+    {
+        $dispatched = $this->container->get(ServerRequestInterface::class)->getAttribute(Dispatched::class);
+        return $dispatched ? $dispatched->handler->routeInstance : null;
     }
 }

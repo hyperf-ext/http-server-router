@@ -25,11 +25,51 @@ class Route
 
     public ?string $name;
 
-    public function __construct(string $rule, array $data, ?string $name = null)
+    private array $defaults;
+
+    public function __construct(string $rule, array $data, ?string $name = null, array $defaults = [])
     {
         $this->rule = $rule;
         $this->data = $data;
         $this->name = empty($name) ? null : $name;
+        $this->defaults = $defaults;
+    }
+
+    public function getRule(): string
+    {
+        return $this->rule;
+    }
+
+    public function getData(): array
+    {
+        return $this->data;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setDefault(string $key, $value): self
+    {
+        $this->defaults[$key] = $value;
+        return $this;
+    }
+
+    public function getDefault(string $key, $default = null)
+    {
+        return Arr::get($this->defaults, $key, $default);
+    }
+
+    public function setDefaults(array $defaults): self
+    {
+        $this->defaults = $defaults;
+        return $this;
+    }
+
+    public function getDefaults(): array
+    {
+        return $this->defaults;
     }
 
     public function createUri(array $parameters = []): Uri
