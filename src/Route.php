@@ -79,13 +79,16 @@ class Route
             $keys = [];
             $last = count($this->data[$i]) - 1;
             foreach ($this->data[$i] as $n => $part) {
+                $matched = false;
                 if (is_string($part)) {
                     $url .= $part;
+                    $matched = true;
                 } else {
                     [$key, $pattern] = $part;
                     if (isset($parameters[$key]) && preg_match('~' . $pattern . '~', (string) $parameters[$key])) {
                         $url .= $parameters[$key];
                         $keys[] = $key;
+                        $matched = true;
                     } else {
                         unset($url, $keys);
                         continue 2;
@@ -93,7 +96,7 @@ class Route
                 }
 
                 if ($n === $last) {
-                    if ($i === 0) {
+                    if ($i === 0 && ! $matched) {
                         throw new InvalidArgumentException(
                             sprintf('The parameters does not matched for the route \'%s\'.', $this->rule)
                         );

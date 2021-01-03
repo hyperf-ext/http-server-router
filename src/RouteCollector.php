@@ -126,6 +126,6 @@ class RouteCollector extends BaseRouteCollector
     public function getCurrentRoute(): ?Route
     {
         $dispatched = ApplicationContext::getContainer()->get(ServerRequestInterface::class)->getAttribute(Dispatched::class);
-        return $dispatched ? $dispatched->handler->routeInstance : null;
+        return empty($dispatched->handler->routeInstance) ? null : $dispatched->handler->routeInstance;
     }
 }
